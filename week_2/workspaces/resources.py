@@ -100,10 +100,10 @@ def mock_s3_resource(context: InitResourceContext) -> MagicMock:
 
 
 @resource(config_schema={
-    "bucket": "dagster",
-    "access_key": "test",
-    "secret_key": "test",
-    "endpoint_url": "http://localstack:4566",
+    "bucket": Field(String),
+    "access_key": Field(String),
+    "secret_key": Field(String),
+    "endpoint_url": Field(String),
 })
 def s3_resource(context: InitResourceContext) -> S3:
     """This resource defines a S3 client"""
