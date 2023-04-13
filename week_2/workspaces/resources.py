@@ -99,13 +99,21 @@ def mock_s3_resource(context: InitResourceContext) -> MagicMock:
     return s3_mock
 
 
-@resource
-def s3_resource():
+@resource(config_schema={
+    "bucket": "dagster",
+    "access_key": "test",
+    "secret_key": "test",
+    "endpoint_url": "http://localstack:4566",
+})
+def s3_resource(context: InitResourceContext) -> S3:
     """This resource defines a S3 client"""
-    pass
+    return S3(**context.resource_config)
 
 
-@resource
-def redis_resource():
+@resource(config_schema={
+    "host": Field(String),
+    "port": Field(String),
+})
+def redis_resource(context: InitResourceContext) -> Redis:
     """This resource defines a Redis client"""
-    pass
+    return Redis(**context.resource_config)
