@@ -25,7 +25,7 @@ def get_s3_data(context: OpExecutionContext) -> List[Stock]:
 
 
 @op
-def process_data_op(stocks: List[Stock]) -> Aggregation:
+def process_data(stocks: List[Stock]) -> Aggregation:
     i_max, high_max = 0, -1
     for i, stock in enumerate(stocks):
         if stock.high > high_max:
@@ -50,7 +50,7 @@ def put_s3_data(ontext: OpExecutionContext, aggregation: Aggregation):
 
 @graph
 def machine_learning_graph():
-    agg = process_data_op(get_s3_data())
+    agg = process_data(get_s3_data())
     put_redis_data(agg)
     put_s3_data(agg)
 
