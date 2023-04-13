@@ -21,10 +21,12 @@ from workspaces.types import Aggregation, Stock
     required_resource_keys={"s3"},
 )
 def get_s3_data(context: OpExecutionContext) -> List[Stock]:
-    return [Stock.from_list() for record in context.resources.s3.get_data(context.op_config["s3_key"])]
+    return [Stock.from_list(record) for record in context.resources.s3.get_data(context.op_config["s3_key"])]
 
 
-@op
+@op(
+    out={"aggregation": Out(dagster_type=Aggregation)},
+)
 def process_data(stocks: List[Stock]) -> Aggregation:
     i_max, high_max = 0, -1
     for i, stock in enumerate(stocks):
@@ -44,7 +46,7 @@ def put_redis_data(context: OpExecutionContext, aggregation: Aggregation):
 @op(
     required_resource_keys={"s3"},
 )
-def put_s3_data(ontext: OpExecutionContext, aggregation: Aggregation):
+def put_s3_data(context: OpExecutionContext, aggregation: Aggregation):
     context.resources.s3.put_data(key_name=str(aggregation.date), data=aggregation)
 
 

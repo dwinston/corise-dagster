@@ -112,7 +112,7 @@ def s3_resource(context: InitResourceContext) -> S3:
 
 @resource(config_schema={
     "host": Field(String),
-    "port": Field(String),
+    "port": Field(Int),
 })
 def redis_resource(context: InitResourceContext) -> Redis:
     """This resource defines a Redis client"""
